@@ -15,4 +15,8 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   resources :users, :only => [:show, :index] do
     resources :posts
   end
+  
+  
+  mount Resque::Server => '/resque'
+  
 end
