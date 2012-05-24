@@ -1,7 +1,7 @@
 
-title "Skinny Controllers"
+title "Offline Jobs"
 
-description "Using model lifecycle callbacks and observers to keep you controller simple"
+description "Using Redis and Resque to perfom work when you want to perform work"
 
 slides "intro.md"
 slides "exercise.md"
