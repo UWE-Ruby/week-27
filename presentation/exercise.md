@@ -1,8 +1,8 @@
-!SLIDE
+!SLIDE quote
 
 # Exercise
 
-Remove code from your Controller
+Move the service specific code to echo posts to an offline job.
 
 !SLIDE quote
 
@@ -12,6 +12,6 @@ Select a partner
 
 Install and Run the Rails Application
 
-Choose callbacks or observers
+Create a Resque Job
 
-Execute
+Echo a post to a service

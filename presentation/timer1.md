@@ -1,10 +1,10 @@
-!SLIDE
+!SLIDE countdown bullets
 
-### Skinny Controller
+### Offline Job Processing
 
-* Install and run the application
-* Choose callbacks or an observer
-* Skinny up that controller
+* Create one or more Resque Jobs
+* Enqueue a post job
+* Echo a post to a service
 
 <div id="countdown_dashboard" style="margin-left: 372px; width: 350px; height:150px;">
   

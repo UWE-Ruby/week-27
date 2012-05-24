@@ -4,24 +4,31 @@
 
 !SLIDE quote
 
-## Add Additional Sources
+## Importing Data
 
-Github
+After a user authorizes a service, enqueue a job that will retrieve content from that service.
 
-Google
-
-...
-
-!SLIDE quote
-
-## More Features
-
-Unified Feed
+From Twitter or Facebook you may retrieve their timeline, friends, likes,
+or hobbies.
 
 !SLIDE quote
 
-## Explore
+## Storing the Data
 
-Redis
+Modeling the content here, you may want to extract only certain pieces of
+data or you may want to store all the data. Ensure that you do not store
+duplicate data for the user.
 
-Resque
+!SLIDE quote
+
+## Personalizing a Service
+
+From their list of hobbies or likes, randomly provide them a suggestion
+for the post.
+
+!SLIDE quote
+
+## Continual Import
+
+How could you continually enqueue a job to import data at a specified
+interval?

@@ -1,4 +1,4 @@
 !SLIDE 
-# Skinny Controllers
+# Offline Job Processing
 
-Model callbacks and Rails observers
+Using Redis and Resque

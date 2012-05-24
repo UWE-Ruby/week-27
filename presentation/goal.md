@@ -2,7 +2,7 @@
 
 # Goals
 
-!SLIDE 
+!SLIDE
 
 ## Turn this ...
 
@@ -25,6 +25,20 @@ end
 !SLIDE
 
 ## ... into this
+
+```ruby
+def create
+  post = Post.create(params[:post],:user => current_user)
+
+  Resque.enqueue(Poster,{ :user_id => current_user.id, :post_id => post.id })
+
+  redirect_to user_posts_path(current_user)
+end
+```
+
+!SLIDE
+
+## or even better ... this
 
 ```ruby
 def create

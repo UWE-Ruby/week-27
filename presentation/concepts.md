@@ -26,36 +26,47 @@ class PostsController < ApplicationController
   end
 
 end
-
 ```
 
-!SLIDE quote
+!SLIDE
 
-## ActiveRecord Model Callbacks
+## A Resque Job
 
 ```ruby
-before_validation
-after_validation
-before_save
-around_save
-before_create
-around_create
-after_create
-after_save
-after_commit
+class Poster
+  @queue = :poster
+
+  def self.perform(options = {})
+    # do work
+  end
+
+  end
+end
 ```
 
-!SLIDE quote
+!SLIDE
 
-## Setting up a callback
+## Enqueuing a Job
 
 ```ruby
-class Post < ActiveRecord::Base
+Resque.enqueue(Poster,{ :user_id => current_user.id, :post_id => post.id })
+```
 
-  before_save :do_this_before_saving
+!SLIDE
 
-  def do_this_before_saving
-    puts "Doing this before saving for post: #{self}"
+```ruby
+class PostsController < ApplicationController
+
+  # ... other actions
+
+  def create
+    post = Post.create(params[:post],:user => current_user)
+    
+    if post.twitter
+      Resque.enqueue(Poster,{ :user_id => current_user.id, :post_id => post.id })
+    end
+
+    redirect_to user_posts_path(current_user)
   end
 
 end
@@ -63,45 +74,41 @@ end
 
 !SLIDE
 
-## Observers
+```bash
+$ brew install redis
+```
 
-```ruby
-class PostObserver < ActiveRecord::Observer
+!SLIDE commandline incremental
 
-  def after_commit(model)
-    puts "Doing this after committing for post: #{model}"
-  end
+## Starting Redis (in another terminal)
 
-end
+```bash
+$ redis-server /usr/local/etc/redis.conf
+[28074] 24 May 14:13:38 * Server started, Redis version 2.4.13
+[28074] 24 May 14:13:38 * DB loaded from disk: 0 seconds
+[28074] 24 May 14:13:38 * The server is now ready to accept connections on port 6379
+[28074] 24 May 14:13:39 - DB 0: 2 keys (0 volatile) in 4 slots HT.
+[28074] 24 May 14:13:39 - 0 clients connected (0 slaves), 950016 bytes in use
 ```
 
 !SLIDE
 
-## Register the Observer
+## Starting a Worker (in another terminal)
 
-```ruby
-# ... in your config/application.rb
-config.active_record.observers = :post_observer
+```bash
+$ rake resque:work QUEUE='*'
 ```
+
+!SLIDE center
+
+## http://localhost:3000/resque
+
+![Resque](../resque.png)
 
 !SLIDE
 
-## Nosey Observers
+## Testing Redis/Resque Setup
 
-```ruby
-class ServiceObserver < ActiveRecord::Observer
-  observe :post
-  
-  def after_commit(model)
-    puts "Doing this after committing for post: #{model}"
-  end
-end
+```bash
+bundle exec rake post
 ```
-
-!SLIDE quote
-
-## Great Reference
-
-[http://guides.rubyonrails.org](http://guides.rubyonrails.org)
-
-Active Record Validations and Callbacks
