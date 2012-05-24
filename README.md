@@ -1,97 +1,59 @@
-## Skinny Controllers
+## Offline Jobs
 
-Rails forces an individual to adhere to the Model-View-Controller (MVC)
-conventions, but it is still incredibly easy for a developer to take the
-project off "the rails" by not trying to keep the cleanest and DRY.
+Last exercise we focused on removing code from the controller and moved it out
+into callbacks and/or observers. This helped with the manageability of the code
+but it failed to alleviate the problem of forcing the user to wait until the 
+request was done sending out posts to all their services that they selected.
 
-One area that usually receives the most punishment are our poor controllers.
-As they sit between the models and the views, they have access to a lot of data
-and thus conventions can get lost and your controllers can start getting
-bloated.
+Imagine what the experience would be like if one of the services went offline or
+became delayed. The user would wait endlessly for the page to finish loading
+even though their work was done.
+
+Imagine that the site became popular and all of sudden you had a large number
+of users wanting to post to all their services. Your servers would soon be
+crippled by your own success.
 
 ### Exercise
 
-This week is a sample Rails application that allows a user to login and
-authenticate with various services. After a user has authorized the various
-services when the user creates a _post_, they can have it appear on the
-various services.
+This week we are going to look at a simple Rails application that allows a user
+to create an account and then tie different social network accounts to their
+account. Users are able to create posts and have them echo'd to all the services 
+that they have set up.
 
-The objective of the exercise is to _skinny up_ the Posts Controller in the
-sample code.
-
-> [app/controller/posts_controller.rb](https://github.com/UWE-Ruby/week-26/blob/master/app/controllers/posts_controller.rb)#create is controller action that
-you should be addressing.
-
-> You should generate a test account for __Twitter__ and/or __Facebook__ to
-  ensure you do not annoy your friends as you create sample posts.
+The goal of this week's exercise is to move the code that echoes their post
+to their specified services into an offline job.
 
 #### Goal
 
 Understand the code.
 
 Move the code that publishes content to __Twitter__ and __Facebook__ out of
-controller and move it into model callbacks or into an observer.
+controller and move it into it's own job.
 
 ### Exercise Retrospective
 
-#### Imagine adding a new service
-
-* How maintainable would logic within the controller become?
-
-* model callbacks?
-
-* a single 'PostObserver'?
-
-* an observer for each service?
-
-#### Imagine removing a service
-
-* How maintainable would logic within the controller become?
-
-* model callbacks?
-
-* a single 'PostObserver'?
-
-* an observer for each service?
-
-#### Handling service specific error messages
-  
-* How maintainable would logic within the controller become?
-
-* model callbacks?
-
-* a single 'PostObserver'?
-
-* an observer for each service?
-
-#### Responsiveness
-
-* What happens to the user's request when a service hangs or takes a long time to respond? Do any of these implementation address this issue?
-
 ### Reading
-
-* [Callbacks](http://guides.rubyonrails.org/active_record_validations_callbacks.html#available-callbacks)
-
-* [Observers](http://guides.rubyonrails.org/active_record_validations_callbacks.html#observers)
 
 ### Further Exercise
 
-This project boilerplate allows you to authenticate and post to additional
-services. This is a common pattern with applications to add these services.
+* After a user authorizes a service, enqueue a job that will retrieve content
+  from that service.
+  
+    > From Twitter or Facebook you may retrieve their timeline, friends, likes, 
+    or hobbies.
 
-* Attempt to add a new authentication service
+* Store that content within the database
+    
+    > Modeling the content here, you may want to extract only certain pieces of
+    data or you may want to store all the data. Ensure that you do not store
+    duplicate data for the user.
 
-    > Google, Github, etc ...
+* Use that content to personalize a service
 
-This is the first part of an exercise. The second part of the exercise we are
-going to look at moving the work that is being performed here in an offline
-job through [Resque](https://github.com/defunkt/resque) and [Redis](http://redis.io/).
+    > From their list of hobbies or likes, randomly provide them a suggestion 
+    for the post.
 
-* Install Redis and Resque
+* Visualize how you might continually import data on a schedule
 
-    > Start to explore Redis and see if you can interact with the server through
-      Resque gem or through another Redis gem.
-
-    > Redis supports many different variable types to store information. Try
-      and use some of these [commands](http://redis.io/commands) to store and
-      retrieve data.
+    > How could you continually enqueue a job to import data at a specified
+    interval?
