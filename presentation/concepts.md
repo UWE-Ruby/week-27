@@ -49,7 +49,7 @@ end
 ## Enqueuing a Job
 
 ```ruby
-Resque.enqueue(Poster,{ :user_id => current_user.id, :post_id => post.id })
+Resque.enqueue(Poster,:post_id => post.id)
 ```
 
 !SLIDE
@@ -61,11 +61,7 @@ class PostsController < ApplicationController
 
   def create
     post = Post.create(params[:post],:user => current_user)
-    
-    if post.twitter
-      Resque.enqueue(Poster,{ :user_id => current_user.id, :post_id => post.id })
-    end
-
+    Resque.enqueue(Poster,:post_id => post.id)
     redirect_to user_posts_path(current_user)
   end
 
@@ -103,7 +99,7 @@ $ rake resque:work QUEUE='*'
 
 ## http://localhost:3000/resque
 
-![Resque](../resque.png)
+![Resque](resque.png)
 
 !SLIDE
 
